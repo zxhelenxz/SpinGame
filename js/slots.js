@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    const images = ["img/cherry.png", "img/grapes.png", "img/heart.png", "img/lemon.png", "img/orange.png", "img/seven.png", "img/strawberry.png"];
+    const images = ["cherry.png", "grapes.png", "heart.png", "lemon.png", "orange.png", "seven.png", "strawberry.png"];
     const myRange = 7 - 1;
     let balance = 50;
     let bet = 1;
@@ -44,9 +44,9 @@ $(document).ready(function () {
             let randnumber1 = Math.floor(myRange * Math.random());
             let randnumber2 = Math.floor(myRange * Math.random());
             let randnumber3 = Math.floor(myRange * Math.random());
-            $('#img1').attr('src', images[randnumber1]);
-            $('#img2').attr('src', images[randnumber2]);
-            $('#img3').attr('src', images[randnumber3]);
+            $('#img1').attr('src', "img/"+images[randnumber1]);
+            $('#img2').attr('src', "img/"+images[randnumber2]);
+            $('#img3').attr('src', "img/"+images[randnumber3]);
             spin(randnumber1, randnumber2, randnumber3);
         }
 
