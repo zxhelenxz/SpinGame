@@ -5,50 +5,68 @@ $(document).ready(function () {
     let bet = 1;
     $('#decrease').click(function () {
         if (bet > 0)
-            bet -= 1;
-        $('#bet').html(bet);
+            $('#bet').html(--bet);
     });
     $('#increase').click(function () {
         if (bet >= 0 && bet < balance)
-            bet += 1;
-        $('#bet').html(bet);
+            $('#bet').html(++bet);
     });
+
     function spin(a, b, c) {
         const heading = $('#headingguide');
         if (a === b && b === c) {
-            heading.html('Congratulation! You won!').css('color', 'red');
+            heading.text('Congratulation! You won!').css('color', 'red');
             heading.fadeTo(100, 0.1).fadeTo(200, 1.0);
             balance += 15 * bet;
-            $('#balance').html(balance);
+            $('#balance').text(balance);
         } else {
-            heading.html('You lost, spin again.').css('color', 'red').fadeTo(100, 0.1).fadeTo(200, 1.0);
+            heading.text('You lost, spin again.').css('color', 'red').fadeTo(100, 0.1).fadeTo(200, 1.0);
             if (balance > 0 && balance >= bet)
                 balance -= bet;
-            $('#balance').html(balance);
+            $('#balance').text(balance);
         }
     }
 
     function checkBalance() {
         if (balance === 0) {
-            $('#headingguide').html('You lost all your money!').css('color', 'red');
+            $('#headingguide').text('You lost all your money!').css('color', 'red');
             return false;
         } else if (balance < bet) {
-            $('#headingguide').html('Invalid bet amount. You do not have enough money to bet' + bet + '$').css('color', 'red');
+            $('#headingguide').text('Invalid bet amount. You do not have enough money to bet' + bet + '$').css('color', 'red');
             return false;
         }
         return true;
     }
+
+    function roll(n) {
+        let i=0;
+        $('#img1').attr('src',"img/"+images[i%n]);
+        $('#img1').fadeOut('slow',function (){
+            $('#img1').fadeIn('slow');
+        });
+        i++;
+    }
+
+    function getRandom() {
+        return Math.floor(myRange * Math.random())
+    }
+
     $('#spin').click(function () {
         bet = parseInt($('#bet').html());
-        if (checkBalance()){
-            let randnumber1 = Math.floor(myRange * Math.random());
-            let randnumber2 = Math.floor(myRange * Math.random());
-            let randnumber3 = Math.floor(myRange * Math.random());
-            $('#img1').attr('src', "img/"+images[randnumber1]);
-            $('#img2').attr('src', "img/"+images[randnumber2]);
-            $('#img3').attr('src', "img/"+images[randnumber3]);
-            spin(randnumber1, randnumber2, randnumber3);
+        if (checkBalance()) {
+                setInterval(roll(myRange),30);
+            // let RandArray =[]
+            // let time=30;
+            // setInterval()
+            // $('img').each(function (){
+            //     RandArray.push(getRandom());
+            //     let image = images[RandArray[RandArray.length-1]];
+            //     time +=15;
+            //     //const interval = setInterval(roll(this,image),time);
+            //     // $(this).attr('src', "img/" + images[RandArray[RandArray.length-1]]);
+            // });
+            // let length = RandArray.length;
+            // spin(RandArray[length-1],RandArray[length-2],RandArray[length-3]);
         }
-
     });
 });
