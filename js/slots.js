@@ -1,8 +1,9 @@
 $(document).ready(function () {
     const images = ["cherry.png", "grapes.png", "heart.png", "lemon.png", "orange.png", "seven.png", "strawberry.png"];
-    const myRange = 7 - 1;
+    const myRange = 7;
     let balance = 50;
     let bet = 1;
+    const heading = $('#headingguide');
     $('#decrease').click(function () {
         if (bet > 0)
             $('#bet').html(--bet);
@@ -13,7 +14,7 @@ $(document).ready(function () {
     });
 
     function spin(a, b, c) {
-        const heading = $('#headingguide');
+        console.log(a,b,c);
         if (a === b && b === c) {
             heading.text('Congratulation! You won!').css('color', 'red');
             heading.fadeTo(100, 0.1).fadeTo(200, 1.0);
@@ -29,44 +30,44 @@ $(document).ready(function () {
 
     function checkBalance() {
         if (balance === 0) {
-            $('#headingguide').text('You lost all your money!').css('color', 'red');
+            heading.text('You lost all your money!').css('color', 'red');
             return false;
         } else if (balance < bet) {
-            $('#headingguide').text('Invalid bet amount. You do not have enough money to bet' + bet + '$').css('color', 'red');
+            heading.text('Invalid bet amount. You do not have enough money to bet' + bet + '$').css('color', 'red');
             return false;
         }
         return true;
     }
-
-    function roll(n) {
-        let i=0;
-        $('#img1').attr('src',"img/"+images[i%n]);
-        $('#img1').fadeOut('slow',function (){
-            $('#img1').fadeIn('slow');
-        });
-        i++;
+    function getRandom(min, max) {
+        return Math.floor((max - min + 1) * Math.random()) + min;
     }
-
-    function getRandom() {
-        return Math.floor(myRange * Math.random())
+    function roll(selector,min,max) {
+        let i = getRandom(0,6);
+        let rand = getRandom(min, max);
+        console.log(rand);
+        const handle = setInterval(() => {
+            i++;
+            if (i === rand){
+                clearInterval(handle);
+            }
+            $(selector).attr('src', "img/" + images[i% myRange]);
+            heading.text('Spinning...').css('color', 'red');
+        }, 10);
+        return rand;
     }
 
     $('#spin').click(function () {
         bet = parseInt($('#bet').html());
+        let RandArray =[];
         if (checkBalance()) {
-                setInterval(roll(myRange),30);
-            // let RandArray =[]
-            // let time=30;
-            // setInterval()
-            // $('img').each(function (){
-            //     RandArray.push(getRandom());
-            //     let image = images[RandArray[RandArray.length-1]];
-            //     time +=15;
-            //     //const interval = setInterval(roll(this,image),time);
-            //     // $(this).attr('src', "img/" + images[RandArray[RandArray.length-1]]);
-            // });
-            // let length = RandArray.length;
-            // spin(RandArray[length-1],RandArray[length-2],RandArray[length-3]);
+                RandArray.push(roll('#img1',24,30));
+                RandArray.push(roll('#img2',36,43));
+                RandArray.push(roll('#img3',51,58));
+                setTimeout(function (){
+                    spin(RandArray[0]%myRange,RandArray[1]%myRange,RandArray[2]%myRange);
+                },RandArray[2]*10);
+
         }
+        console.log(RandArray.toString());
     });
 });
